@@ -1,5 +1,6 @@
 package com.example.mvvm_di_compose.view
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -18,9 +19,9 @@ import com.example.mvvm_di_compose.viewmodels.DetailsViewModel
 import com.example.mvvm_di_compose.viewmodels.DetailsViewModelFactory
 
 class DetailsViewActivity : AppCompatActivity() {
-    lateinit var binding: ActivityDetailsViewBinding
-    lateinit var viewModel: DetailsViewModel
-    var comments:ArrayList<Comment> =ArrayList<Comment>()
+    private lateinit var binding: ActivityDetailsViewBinding
+    private lateinit var viewModel: DetailsViewModel
+    private var comments:ArrayList<Comment> =ArrayList<Comment>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +38,7 @@ class DetailsViewActivity : AppCompatActivity() {
 
 
 
+    @SuppressLint("NotifyDataSetChanged", "ShowToast")
     private fun setData() {
         val repository = (application as GitApplication).quoteRepository
 
@@ -46,30 +48,36 @@ class DetailsViewActivity : AppCompatActivity() {
         )
             .get(DetailsViewModel::class.java)
 
-        viewModel.comments.observe(this, Observer {
-            when(it){
-                is Response.Loading ->{
+        viewModel.comments.observe(this) {
+            when (it) {
+                is Response.Loading -> {
                     binding.loader.show()
                 }
-                is Response.Success ->{
+
+                is Response.Success -> {
                     binding.loader.hide()
                     comments.clear()
                     comments.addAll(it.data!!)
                     binding.rvComment.adapter!!.notifyDataSetChanged()
 
-                    if(it.data.size ==0){
-                        Toast.makeText(this,resources.getString(R.string.no_comments_found),Toast.LENGTH_SHORT)
+                    if (it.data.isEmpty()) {
+                        Toast.makeText(
+                            this,
+                            resources.getString(R.string.no_comments_found),
+                            Toast.LENGTH_SHORT
+                        )
                     }
                 }
-                is Response.Error ->{
+
+                is Response.Error -> {
                     binding.loader.hide()
                 }
             }
 
-        })
-        viewModel.issue.observe(this, Observer {
-            binding.model =it
-        })
+        }
+        viewModel.issue.observe(this) {
+            binding.model = it
+        }
 
 
     }

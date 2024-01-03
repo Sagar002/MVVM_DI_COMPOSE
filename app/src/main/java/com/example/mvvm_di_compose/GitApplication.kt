@@ -5,7 +5,9 @@ import com.example.mvvm_di_compose.api.GitService
 import com.example.mvvm_di_compose.api.RetrofitHelper
 import com.example.mvvm_di_compose.db.GitDatabase
 import com.example.mvvm_di_compose.repository.GitRepository
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class GitApplication : Application() {
     lateinit var quoteRepository: GitRepository
 
