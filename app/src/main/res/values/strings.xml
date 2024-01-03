@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GitIssueList</string>
+    <string name="updated_on">Updated on: </string>
+    <string name="created_by">Created By: </string>
+    <string name="Comments">"Comments: "</string>
+    <string name="no_comments_found">No Comments found related to this issue</string>
+</resources>
